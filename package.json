@@ -2,7 +2,7 @@
   "name": "billable",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kadroff.github.io/billable",
+  "homepage": "https://kadroff.github.io/Billable",
   "dependencies": {
     "gh-pages": "^2.0.1",
     "react": "^16.8.6",
