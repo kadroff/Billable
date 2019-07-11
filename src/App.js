@@ -15,11 +15,11 @@ function App() {
     invoice_number: "1",
     invoice_number_label: "Invoice #",
     kind: "INVOICE",
-    notes_b: "↵Created with Billable.me",
+    notes_b: "Created with Billable.me",
     price_label: "Price",
     quantity_label: "Quantity",
     recipient_info:
-      "Michael Scott Paper Company Inc.↵1725 Slough Avenue↵Scranton, Pennsylvania",
+      "Michael Scott Paper Company Inc.1725 Slough Avenue↵Scranton, Pennsylvania",
     subtotal_label: "Subtotal",
     tax_name: "VAT",
     tax_percentage: "14",
@@ -234,7 +234,9 @@ function App() {
                 <TableDateData
                   type="number"
                   name="quantity"
-                  defaultValue={items != null ? items.quantity : items.quantity}
+                  defaultValue={
+                    items != null ? items.quantity : values.quantity
+                  }
                   onChange={handleInputChange}
                 />
               </td>
@@ -242,7 +244,7 @@ function App() {
                 <TableDateData
                   type="number"
                   name="price"
-                  defaultValue={items != null ? items.price : items.price}
+                  defaultValue={items != null ? items.price : values.price}
                   onChange={handleInputChange}
                 />
               </td>
