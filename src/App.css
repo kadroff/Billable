@@ -1,6 +1,5 @@
-td,
-th {
-  border: 1px solid #ced5d2;
+* {
+  font-family: Arial;
 }
 
 th {
@@ -17,7 +16,7 @@ th {
 }
 
 .total_table_header {
-  width: 10%;
+  width: 30%;
 }
 
 .total_table_percent {
@@ -25,5 +24,13 @@ th {
 }
 
 .total_table_calculate {
-  width: 10%;
+  width: 20%;
+}
+
+input:hover {
+  background-color: #f9fafe;
+}
+
+textarea:hover {
+  background-color: #f9fafe;
 }

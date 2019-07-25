@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Pdf from "react-to-pdf";
 import "./App.css";
 import styled from "styled-components";
+import TableRow from "./TableRow.js";
 
 function App() {
   const [values, setValues] = useState({
+    rows: [{}],
     quantity: 1,
     price: 2,
     percent: 12,
@@ -71,16 +73,23 @@ function App() {
     JSON.parse(localStorage.getItem("billable"));
   };
 
+  const [stateOptions, setStateValues] = useState([]);
+
+  const addRow = () => {
+    const newElement = 1;
+    setStateValues([...stateOptions, newElement]);
+  };
+
   return (
     <Main>
       {/* Convert to PDF */}
       <Pdf targetRef={ref} filename="invoice.pdf">
         {({ toPdf }) => (
-          <OptionButton type="button" value="Download PDF" onClick={toPdf} />
+          <OptionButtonPdf type="button" value="Download PDF" onClick={toPdf} />
         )}
       </Pdf>
 
-      <OptionButton type="button" value="Save" onClick={setLocalStorage} />
+      <OptionButtonSave type="button" value="Save" onClick={setLocalStorage} />
 
       <Pages ref={ref}>
         <Kind
@@ -109,6 +118,10 @@ function App() {
           name="company_info"
           onChange={handleInputChange}
         />
+        <DateCompany>Date Issued:</DateCompany>
+        <CompanyDateInput defaultValue="14 июня" />
+        <NumberCompany>Invoice No:</NumberCompany>
+        <CompanyDateInvoice defaultValue="8917777" />
         <InformationCompany
           defaultValue={
             billableItems != null
@@ -118,67 +131,10 @@ function App() {
           name="recipient_info"
           onChange={handleInputChange}
         />
-        <TableDate>
-          <tbody>
-            <tr>
-              <th>
-                <TableDateHeader
-                  type="text"
-                  name="invoice_number_label"
-                  onChange={handleInputChange}
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.invoice_number_label
-                      : values.invoice_number_label
-                  }
-                />
-              </th>
-              <td>
-                <TableDateData
-                  type="text"
-                  name="invoice_number"
-                  onChange={handleInputChange}
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.invoice_number
-                      : values.invoice_number
-                  }
-                />
-              </td>
-            </tr>
-
-            <tr>
-              <th>
-                <TableDateHeader
-                  type="text"
-                  name="invoice_date_label"
-                  onChange={handleInputChange}
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.invoice_date_label
-                      : values.invoice_date_label
-                  }
-                />
-              </th>
-              <td>
-                <TableDateData
-                  type="text"
-                  name="invoice_date"
-                  onChange={handleInputChange}
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.invoice_date
-                      : values.invoice_date
-                  }
-                />
-              </td>
-            </tr>
-          </tbody>
-        </TableDate>
         <TableDescription>
           <tbody>
             <tr>
-              <th style={{ width: "50%", backgroundColor: "#f1f4f3" }}>
+              <th style={{ width: "50%", backgroundColor: "#4473EA" }}>
                 <TableDateHeader
                   type="text"
                   defaultValue={
@@ -191,7 +147,7 @@ function App() {
                   style={{ width: "100%" }}
                 />
               </th>
-              <th style={{ backgroundColor: "#f1f4f3" }}>
+              <th style={{ backgroundColor: "#4473EA" }}>
                 <TableDateHeader
                   type="text"
                   name="quantity_label"
@@ -203,7 +159,7 @@ function App() {
                   }
                 />
               </th>
-              <th style={{ backgroundColor: "#f1f4f3" }}>
+              <th style={{ backgroundColor: "#4473EA" }}>
                 <TableDateHeader
                   type="text"
                   name="price_label"
@@ -249,42 +205,31 @@ function App() {
                 />
               </td>
             </tr>
+
+            {stateOptions.map(row => (
+              <TableRow id={stateOptions.length} />
+            ))}
+
+            <tr>
+              <td>
+                <AddRowButton type="button" onClick={addRow} value="[ + ]" />
+              </td>
+            </tr>
           </tbody>
         </TableDescription>
 
         <TableTotal>
           <tbody>
             <tr>
-              <th className="total_table_header">
-                <TableDateHeader
-                  type="text"
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.subtotal_label
-                      : values.subtotal_label
-                  }
-                  className="total_table"
-                  name="subtotal_label"
-                  onChange={handleInputChange}
-                />
+              <th>
+                <TableTotalDate>Subtotal:</TableTotalDate>
               </th>
-              <th className="total_table_percent" />
               <th className="total_table_calculate">{subtotal.toFixed(2)}</th>
             </tr>
 
             <tr>
               <th>
-                <TableDateHeader
-                  type="text"
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.tax_name
-                      : values.tax_name
-                  }
-                  name="tax_name"
-                  onChange={handleInputChange}
-                  className="total_table"
-                />
+                <TableTotalDate>VAT</TableTotalDate>
               </th>
               <th>
                 <TableDateData
@@ -304,35 +249,12 @@ function App() {
 
             <tr>
               <th>
-                <TableDateHeader
-                  type="text"
-                  defaultValue={
-                    billableItems != null
-                      ? billableItems.total_label
-                      : values.total_label
-                  }
-                  name="total_label"
-                  onChange={handleInputChange}
-                  className="total_table"
-                />
-              </th>
-              <th>
-                <TableDateData className="total_table" />
+                <TableTotalDate>Total:</TableTotalDate>
               </th>
               <th>{total.toFixed(2)}</th>
             </tr>
           </tbody>
         </TableTotal>
-
-        <FooterNotes />
-        <FooterNotes
-          style={{ textAlign: "right" }}
-          name="notes_b"
-          onChange={handleInputChange}
-          defaultValue={
-            billableItems != null ? billableItems.notes_b : values.notes_b
-          }
-        />
       </Pages>
     </Main>
   );
@@ -341,19 +263,18 @@ function App() {
 export default App;
 
 const Main = styled.div`
-  width: 22cm;
+  width: 21cm;
   max-width: 840px;
-  background-color: white;
+  background-color: #f9fafe;
   margin: 0 auto;
 `;
 
 const Pages = styled.div`
   width: 21cm;
-  max-width: 874px;
-  background: #fafbfb;
+  max-width: 840px;
+  background: white;
   border: 1px solid #f5f7f6;
-  margin: 20px;
-  padding: 13px 0;
+  margin-top: 34px;
   display: grid;
   grid-gap: 2vw;
   grid-template-columns: 50% 45%;
@@ -369,31 +290,21 @@ const Pages = styled.div`
 const Kind = styled.input`
   grid-area: kind
   text-align: center;
-  border: 1px solid #d4d6d9;
-  border-width: 1px 0;
-  padding: 6px 0;
-  color: #2f5756;
-  font-weight: bold;
-  text-transform: uppercase;
+  font-size: 24px;
+  line-height: 28px;
+  padding: 40px 0;
   margin: 0 0 15px 0;
-
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
+  border: none
 `;
 
 const CompanyName = styled.textarea`
   grid-area: name
   overflow: hidden;
   resize: none;
-  font-size: 3em;
-  height: 110px;
+  font-size: 16px;
+  height: 20px;
   border: none;
-  background-color: #fafbfb;
-
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
+  padding-left: 40px; 
 `;
 
 const AddressCompany = styled.textarea`
@@ -401,13 +312,55 @@ const AddressCompany = styled.textarea`
   overflow: hidden;
   text-align: right;
   resize: none;
+  padding-right: 33px;
   height: 110px;
+  color: #4473EA
+  font-size: 10px;
   border: none;
-  background-color: #fafbfb;
 
   &:hover {
-    background-color: rgb(249, 245, 198);
+    background-color: #F9FAFE;
   }
+`;
+
+const DateCompany = styled.p`
+  grid-area: name;
+  font-size: 10px;
+  padding-top: 40px;
+  padding-left: 40px;
+`;
+
+const NumberCompany = styled.p`
+  grid-area: name;
+  font-size: 10px;
+  padding-top: 60px;
+  padding-left: 40px;
+`;
+
+const CompanyDateInput = styled.input`
+  grid-area: name;
+  overflow: hidden;
+  resize: none;
+  height: 15px;
+  width: 105px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 100px;
+  margin-top: 47px;
+  border: none;
+`;
+
+const CompanyDateInvoice = styled.input`
+  grid-area: name;
+  overflow: hidden;
+  resize: none;
+  height: 15px;
+  width: 105px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 100px;
+  margin-top: 67px;
+  border: none;
 `;
 
 const InformationCompany = styled.textarea`
@@ -415,45 +368,30 @@ const InformationCompany = styled.textarea`
   overflow: hidden;
   resize: none;
   height: 110px;
+  font-size: 10px;
+  padding-left: 40px;
   border: none;
-  background-color: #fafbfb;
-
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
-`;
-
-const TableDate = styled.table`
-  grid-area: table_date
-  border: 1px solid #ced5d2;
-  border-collapse: collapse;
-  table-layout: auto;
-  width: 1px;
 `;
 
 const TableDateHeader = styled.input`
   border: none;
   padding: 6px 0;
-  color: #2f5756;
+  color: white;
+  background: #4473ea;
   font-weight: bold;
 
   &:hover {
-    background-color: rgb(249, 245, 198);
+    background: #4473ea;
   }
 `;
 
 const TableDateData = styled.input`
   border: none;
   padding: 6px 0;
-
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
 `;
 
 const TableDescription = styled.table`
   grid-area: table_description
-  border: 1px solid #ced5d2;
   border-collapse: collapse;
 `;
 
@@ -461,33 +399,46 @@ const TableTotal = styled.table`
   grid-area: total
   width: 35%
   margin-left: 58%;
-  border: 1px solid #ced5d2;
-  border-collapse: collapse;
+  font-size: 12px;
 `;
 
-const OptionButton = styled.input`
-  height: 26px;
-  line-height: 26px;
-  padding: 0 16px;
-  text-decoration: none;
-  background: #fff;
-  color: #93b8b3;
-  margin: 0 5px 0 0;
-  border: 1px solid #93b8b3;
-  border-radius: 0.5em;
-  cursor: pointer;
+const TableTotalDate = styled.p`
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 80px;
 `;
 
-const FooterNotes = styled.textarea`
-  grid-ares: footer;
-  color: #bebebe;
-  font-size: 0.9em;
-  padding-bottom: 9px;
-  resize: none;
+const TotalDateHeader = styled.input`
   border: none;
-  background-color: #fafbfb;
+  padding: 6px 0;
+  color: #333333;
+  font-size: 12px;
+`;
 
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
+const OptionButtonSave = styled.input`
+  width: 72px;
+  height: 25px;
+  cursor: pointer;
+  background: #4473ea;
+  font-size: 12px;
+  color: white;
+  border: 1px solid #4473ea;
+  border-radius: 15px;
+`;
+
+const OptionButtonPdf = styled.input`
+  width: 112px;
+  height: 25px;
+  cursor: pointer;
+  background: white;
+  font-size: 12px;
+  color: #4473ea;
+  border: 1px solid #4473ea;
+  border-radius: 15px;
+`;
+
+const AddRowButton = styled.input`
+  font-size: 0.8em;
+  outline: none;
+  text-decoration: none;
 `;
