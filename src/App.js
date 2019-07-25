@@ -134,7 +134,15 @@ function App() {
         <TableDescription>
           <tbody>
             <tr>
-              <th style={{ width: "50%", backgroundColor: "#4473EA" }}>
+              <th
+                style={{
+                  width: "50%",
+                  backgroundColor: "#4473EA",
+                  borderTopLeftRadius: "3px",
+                  borderBottomLeftRadius: "3px",
+                  paddingLeft: "19px"
+                }}
+              >
                 <TableDateHeader
                   type="text"
                   defaultValue={
@@ -159,7 +167,13 @@ function App() {
                   }
                 />
               </th>
-              <th style={{ backgroundColor: "#4473EA" }}>
+              <th
+                style={{
+                  backgroundColor: "#4473EA",
+                  borderTopRightRadius: "3px",
+                  borderBottomRightRadius: "3px"
+                }}
+              >
                 <TableDateHeader
                   type="text"
                   name="price_label"
@@ -220,38 +234,56 @@ function App() {
 
         <TableTotal>
           <tbody>
-            <tr>
-              <th>
-                <TableTotalDate>Subtotal:</TableTotalDate>
-              </th>
-              <th className="total_table_calculate">{subtotal.toFixed(2)}</th>
-            </tr>
+            <div>
+              <tr>
+                <th>
+                  <TableTotalDate>Subtotal:</TableTotalDate>
+                </th>
+                <th className="total_table_calculate">
+                  ${subtotal.toFixed(2)}
+                </th>
+              </tr>
 
-            <tr>
-              <th>
-                <TableTotalDate>VAT</TableTotalDate>
-              </th>
-              <th>
-                <TableDateData
-                  name="percent"
-                  type="number"
-                  value={
-                    billableItems != null
-                      ? billableItems.percent
-                      : values.percent
-                  }
-                  onChange={handleInputChange}
-                  className="total_table"
-                />
-              </th>
-              <th>{percent.toFixed(2)}</th>
-            </tr>
+              <tr>
+                <th>
+                  <TableTotalDate style={{ marginLeft: "45px" }}>
+                    VAT
+                  </TableTotalDate>
+                </th>
+                <th>
+                  <TableDateData
+                    name="percent"
+                    type="number"
+                    value={
+                      billableItems != null
+                        ? billableItems.percent
+                        : values.percent
+                    }
+                    onChange={handleInputChange}
+                    className="total_table"
+                    style={{ marginLeft: "-90px", fontSize: "14px" }}
+                  />
+                </th>
 
+                <th className="total_table_calculate">
+                  <p style={{ marginLeft: "-105px" }}>${percent.toFixed(2)}</p>
+                </th>
+              </tr>
+            </div>
             <tr>
-              <th>
-                <TableTotalDate>Total:</TableTotalDate>
-              </th>
-              <th>{total.toFixed(2)}</th>
+              <div
+                style={{ borderTop: "2px solid #4473EA", paddingLeft: "20%" }}
+              >
+                <th>
+                  <TableTotalDate>Total:</TableTotalDate>
+                </th>
+                <th
+                  style={{ fontWeight: 600, fontSize: "21px" }}
+                  className="total_table_calculate"
+                >
+                  ${total.toFixed(2)}
+                </th>
+              </div>
             </tr>
           </tbody>
         </TableTotal>
@@ -270,7 +302,6 @@ const Main = styled.div`
 `;
 
 const Pages = styled.div`
-  width: 21cm;
   max-width: 840px;
   background: white;
   border: 1px solid #f5f7f6;
@@ -288,53 +319,53 @@ const Pages = styled.div`
 `;
 
 const Kind = styled.input`
-  grid-area: kind
+  grid-area: kind;
   text-align: center;
-  font-size: 24px;
+  font-size: 32px;
   line-height: 28px;
-  padding: 40px 0;
+  padding: 48px 0;
   margin: 0 0 15px 0;
-  border: none
+  border: none;
 `;
 
 const CompanyName = styled.textarea`
-  grid-area: name
+  grid-area: name;
   overflow: hidden;
   resize: none;
-  font-size: 16px;
+  font-size: 21px;
   height: 20px;
   border: none;
-  padding-left: 40px; 
+  padding-left: 52px;
 `;
 
 const AddressCompany = styled.textarea`
-  grid-area: address
+  grid-area: address;
   overflow: hidden;
   text-align: right;
   resize: none;
-  padding-right: 33px;
+  padding-right: 51px;
   height: 110px;
-  color: #4473EA
-  font-size: 10px;
+  color: #4473ea;
+  font-size: 12px;
   border: none;
 
   &:hover {
-    background-color: #F9FAFE;
+    background-color: #f9fafe;
   }
 `;
 
 const DateCompany = styled.p`
   grid-area: name;
-  font-size: 10px;
-  padding-top: 40px;
-  padding-left: 40px;
+  font-size: 13px;
+  padding-top: 25px;
+  padding-left: 53px;
 `;
 
 const NumberCompany = styled.p`
   grid-area: name;
-  font-size: 10px;
-  padding-top: 60px;
-  padding-left: 40px;
+  font-size: 13px;
+  padding-top: 46px;
+  padding-left: 53px;
 `;
 
 const CompanyDateInput = styled.input`
@@ -343,10 +374,10 @@ const CompanyDateInput = styled.input`
   resize: none;
   height: 15px;
   width: 105px;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: bold;
-  margin-left: 100px;
-  margin-top: 47px;
+  margin-left: 130px;
+  margin-top: 38px;
   border: none;
 `;
 
@@ -356,20 +387,20 @@ const CompanyDateInvoice = styled.input`
   resize: none;
   height: 15px;
   width: 105px;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: bold;
-  margin-left: 100px;
-  margin-top: 67px;
+  margin-left: 122px;
+  margin-top: 58px;
   border: none;
 `;
 
 const InformationCompany = styled.textarea`
-  grid-area: information
+  grid-area: information;
   overflow: hidden;
   resize: none;
   height: 110px;
-  font-size: 10px;
-  padding-left: 40px;
+  font-size: 12px;
+  padding-left: 61px;
   border: none;
 `;
 
@@ -388,11 +419,18 @@ const TableDateHeader = styled.input`
 const TableDateData = styled.input`
   border: none;
   padding: 6px 0;
+  font-size: 14px;
+  text-align: right;
 `;
 
 const TableDescription = styled.table`
   grid-area: table_description
+  width: 86%;
+  height: 107px;
   border-collapse: collapse;
+  margin: 0 auto;
+  
+  
 `;
 
 const TableTotal = styled.table`
@@ -403,35 +441,35 @@ const TableTotal = styled.table`
 `;
 
 const TableTotalDate = styled.p`
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 400;
   margin-left: 80px;
 `;
 
-const TotalDateHeader = styled.input`
-  border: none;
-  padding: 6px 0;
-  color: #333333;
-  font-size: 12px;
-`;
-
 const OptionButtonSave = styled.input`
-  width: 72px;
-  height: 25px;
+  width: 92px;
+  height: 30px;
   cursor: pointer;
+  margin-left: 501px;
   background: #4473ea;
-  font-size: 12px;
+  font-size: 16px;
   color: white;
   border: 1px solid #4473ea;
   border-radius: 15px;
+
+  &:hover {
+    background: #4473ea;
+  }
 `;
 
 const OptionButtonPdf = styled.input`
-  width: 112px;
-  height: 25px;
+  width: 144px;
+  height: 32px;
+  margin-top: 23px;
+  margin-left: 25px;
   cursor: pointer;
   background: white;
-  font-size: 12px;
+  font-size: 16px;
   color: #4473ea;
   border: 1px solid #4473ea;
   border-radius: 15px;
@@ -441,4 +479,8 @@ const AddRowButton = styled.input`
   font-size: 0.8em;
   outline: none;
   text-decoration: none;
+  background: none;
+  border: none;
+  color: #4473ea;
+  cursor: pointer;
 `;

@@ -26,8 +26,4 @@ export default TableRow;
 const TableDateData = styled.input`
   border: none;
   padding: 6px 0;
-
-  &:hover {
-    background-color: rgb(249, 245, 198);
-  }
 `;

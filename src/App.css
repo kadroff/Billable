@@ -2,6 +2,11 @@
   font-family: Arial;
 }
 
+html,
+body {
+  background: linear-gradient(126.39deg, #a1c4fd 15.98%, #c2e9fb 112.5%);
+}
+
 th {
   padding-left: 5px;
   padding-right: 5px;
@@ -25,6 +30,8 @@ th {
 
 .total_table_calculate {
   width: 20%;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 input:hover {
