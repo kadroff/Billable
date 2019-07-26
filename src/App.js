@@ -5,36 +5,34 @@ import styled from "styled-components";
 import TableRow from "./TableRow.js";
 
 function App() {
+  const billableItems = JSON.parse(localStorage.getItem("billable"));
+  const items = JSON.parse(localStorage.getItem("billable_items"));
   const [values, setValues] = useState({
     rows: [{}],
-    quantity: 1,
-    price: 2,
-    percent: 12,
-    company_info: "www.example.com↵info@example.com",
-    company_name: "Example Co.",
-    description_label: "Item & Description",
-    invoice_date_label: "Date",
-    invoice_number: "1",
-    invoice_number_label: "Invoice #",
-    kind: "INVOICE",
-    notes_b: "Created with Billable.me",
-    price_label: "Price",
-    quantity_label: "Quantity",
+    quantity: items.quantity || 1,
+    price: items.price || 2,
+    percent: items.percent || 12,
+    company_info:
+      billableItems.company_info || "www.example.com↵info@example.com",
+    company_name: billableItems.company_name || "Example Co.",
+    description_label: billableItems.description_label || "Item & Description",
+    invoice_date_label: billableItems.invoice_date_label || "Date",
+    invoice_number: billableItems.invoice_number || "1",
+    invoice_number_label: billableItems.invoice_number_label || "Invoice #",
+    kind: billableItems.kind || "INVOICE",
+    price_label: billableItems.price_label || "Price",
+    quantity_label: billableItems.quantity_label || "Quantity",
     recipient_info:
+      billableItems.recipient_info ||
       "Michael Scott Paper Company Inc.1725 Slough Avenue↵Scranton, Pennsylvania",
-    subtotal_label: "Subtotal",
-    tax_name: "VAT",
-    tax_percentage: "14",
-    total_label: "Total",
-    invoice_date: "10 July, 2019",
-    description_table_row: ""
+    invoice_date: billableItems.invoice_date || "10 July, 2019",
+    description_table_row: billableItems.description_table_row || ""
   });
+  console.log(values);
   const ref = React.createRef();
   const subtotal = values.quantity * values.price;
   const percent = (values.percent / 100) * subtotal;
   const total = subtotal + percent;
-  const items = JSON.parse(localStorage.getItem("billable_items"));
-  const billableItems = JSON.parse(localStorage.getItem("billable"));
 
   const handleInputChange = e => {
     const value = e.target.value;
@@ -45,7 +43,8 @@ function App() {
   const setLocalStorage = () => {
     const valueItems = {
       quantity: values.quantity,
-      price: values.price
+      price: values.price,
+      percent: values.percent
     };
     localStorage.setItem("billable_items", JSON.stringify(valueItems));
     JSON.parse(localStorage.getItem("billable_items"));
@@ -72,7 +71,6 @@ function App() {
     localStorage.setItem("billable", JSON.stringify(billableValue));
     JSON.parse(localStorage.getItem("billable"));
   };
-
   const [stateOptions, setStateValues] = useState([]);
 
   const addRow = () => {
@@ -119,9 +117,25 @@ function App() {
           onChange={handleInputChange}
         />
         <DateCompany>Date Issued:</DateCompany>
-        <CompanyDateInput defaultValue="14 июня" />
+        <CompanyDateInput
+          name="invoice_date"
+          defaultValue={
+            billableItems != null
+              ? billableItems.invoice_date
+              : values.invoice_date
+          }
+          onChange={handleInputChange}
+        />
         <NumberCompany>Invoice No:</NumberCompany>
-        <CompanyDateInvoice defaultValue="8917777" />
+        <CompanyDateInvoice
+          name="invoice_number"
+          defaultValue={
+            billableItems != null
+              ? billableItems.invoice_number
+              : values.invoice_number
+          }
+          onChange={handleInputChange}
+        />
         <InformationCompany
           defaultValue={
             billableItems != null
@@ -254,10 +268,8 @@ function App() {
                   <TableDateData
                     name="percent"
                     type="number"
-                    value={
-                      billableItems != null
-                        ? billableItems.percent
-                        : values.percent
+                    defaultValue={
+                      billableItems != null ? items.percent : values.percent
                     }
                     onChange={handleInputChange}
                     className="total_table"
