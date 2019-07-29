@@ -17,6 +17,9 @@ function TableRow() {
       <td className="description_table_row">
         <TableDateData type="number" name="price" />
       </td>
+      <td>
+        <DeleteRowButton type="button" value="[ - ]" />
+      </td>
     </tr>
   );
 }
@@ -26,4 +29,14 @@ export default TableRow;
 const TableDateData = styled.input`
   border: none;
   padding: 6px 0;
+`;
+
+const DeleteRowButton = styled.input`
+  font-size: 0.8em;
+  outline: none;
+  text-decoration: none;
+  background: none;
+  border: none;
+  color: #4473ea;
+  cursor: pointer;
 `;

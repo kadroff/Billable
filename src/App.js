@@ -7,28 +7,40 @@ import TableRow from "./TableRow.js";
 function App() {
   const billableItems = JSON.parse(localStorage.getItem("billable"));
   const items = JSON.parse(localStorage.getItem("billable_items"));
+
   const [values, setValues] = useState({
-    rows: [{}],
-    quantity: items.quantity || 1,
-    price: items.price || 2,
-    percent: items.percent || 12,
+    row_count: 5,
+    quantity: items !== null ? items.quantity : 1,
+    price: items !== null ? items.price : 2,
+    percent: items !== null ? items.percent : 12,
     company_info:
-      billableItems.company_info || "www.example.com↵info@example.com",
-    company_name: billableItems.company_name || "Example Co.",
-    description_label: billableItems.description_label || "Item & Description",
-    invoice_date_label: billableItems.invoice_date_label || "Date",
-    invoice_number: billableItems.invoice_number || "1",
-    invoice_number_label: billableItems.invoice_number_label || "Invoice #",
-    kind: billableItems.kind || "INVOICE",
-    price_label: billableItems.price_label || "Price",
-    quantity_label: billableItems.quantity_label || "Quantity",
+      billableItems !== null
+        ? billableItems.company_info
+        : "www.example.com↵info@example.com",
+    company_name:
+      billableItems !== null ? billableItems.company_name : "Example Co.",
+    description_label:
+      billableItems !== null
+        ? billableItems.description_label
+        : "Item & Description",
+    invoice_date_label:
+      billableItems !== null ? billableItems.invoice_date_label : "Date",
+    invoice_number: billableItems !== null ? billableItems.invoice_number : "1",
+    invoice_number_label:
+      billableItems !== null ? billableItems.invoice_number_label : "Invoice #",
+    kind: billableItems !== null ? billableItems.kind : "INVOICE",
+    price_label: billableItems !== null ? billableItems.price_label : "Price",
+    quantity_label:
+      billableItems !== null ? billableItems.quantity_label : "Quantity",
     recipient_info:
-      billableItems.recipient_info ||
-      "Michael Scott Paper Company Inc.1725 Slough Avenue↵Scranton, Pennsylvania",
-    invoice_date: billableItems.invoice_date || "10 July, 2019",
-    description_table_row: billableItems.description_table_row || ""
+      billableItems !== null
+        ? billableItems.recipient_info
+        : "Michael Scott Paper Company Inc.1725 Slough Avenue↵Scranton, Pennsylvania",
+    invoice_date:
+      billableItems !== null ? billableItems.invoice_date : "10 July, 2019",
+    description_table_row:
+      billableItems !== null ? billableItems.description_table_row : ""
   });
-  console.log(values);
   const ref = React.createRef();
   const subtotal = values.quantity * values.price;
   const percent = (values.percent / 100) * subtotal;
@@ -65,17 +77,19 @@ function App() {
       tax_name: values.tax_name,
       total_label: values.total_label,
       invoice_date: values.invoice_date,
-      description_table_row: values.description_label
+      description_table_row: values.description_label,
+      row_count: values.row_count
     };
 
     localStorage.setItem("billable", JSON.stringify(billableValue));
     JSON.parse(localStorage.getItem("billable"));
+    localStorage.setItem("rows", JSON.stringify(stateOptions));
   };
-  const [stateOptions, setStateValues] = useState([]);
 
+  const rows = JSON.parse(localStorage.getItem("rows"));
+  const [stateOptions, setStateValues] = useState(rows !== null ? rows : []);
   const addRow = () => {
-    const newElement = 1;
-    setStateValues([...stateOptions, newElement]);
+    setStateValues([...stateOptions, "new row"]);
   };
 
   return (
@@ -212,7 +226,9 @@ function App() {
                 onChange={handleInputChange}
                 style={{ width: "100%" }}
               >
-                <TableDateData style={{ width: "100%", height: "100%" }} />
+                <TableDateData
+                  style={{ width: "100%", height: "100%", textAlign: "left" }}
+                />
               </td>
               <td className="description_table_row">
                 <TableDateData
@@ -235,7 +251,7 @@ function App() {
             </tr>
 
             {stateOptions.map(row => (
-              <TableRow id={stateOptions.length} />
+              <TableRow />
             ))}
 
             <tr>
