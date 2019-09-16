@@ -91,7 +91,10 @@ function App() {
   const addRow = () => {
     setStateValues([...stateOptions, "new row"]);
   };
-
+  const handleDelete = index => {
+    stateOptions.splice(index, 1);
+    return setStateValues([...stateOptions]);
+  };
   return (
     <Main>
       {/* Convert to PDF */}
@@ -249,11 +252,13 @@ function App() {
                 />
               </td>
             </tr>
-
-            {stateOptions.map(row => (
-              <TableRow />
+            {stateOptions.map((row, index) => (
+              <TableRow
+                onDelete={index => handleDelete(index)}
+                key={index}
+                index={index}
+              />
             ))}
-
             <tr>
               <td>
                 <AddRowButton type="button" onClick={addRow} value="[ + ]" />

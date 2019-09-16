@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function TableRow() {
+function TableRow(props) {
   return (
     <tr>
       <td
@@ -18,7 +18,11 @@ function TableRow() {
         <TableDateData type="number" name="price" />
       </td>
       <td>
-        <DeleteRowButton type="button" value="[ - ]" />
+        <DeleteRowButton
+          onClick={() => props.onDelete(props.index)}
+          type="button"
+          value="[ - ]"
+        />
       </td>
     </tr>
   );
